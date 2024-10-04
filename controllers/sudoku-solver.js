@@ -47,7 +47,17 @@ class SudokuSolver {
   }
 
   checkRegionPlacement(puzzleArray, row, column, value) {
-
+    const startRow = Math.floor(row / 3) * 3;
+    const startColumn = Math.floor(column / 3) * 3;
+    
+    for (let i = startRow; i < startRow + 3; i++) {
+      for (let j = startColumn; j < startColumn + 3; i++) {
+        if (puzzleArray[i][j] == value) {
+          return false;
+        }
+      }
+    }
+    return true;
   }
 
   solve(puzzleString) {
