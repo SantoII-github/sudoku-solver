@@ -13,6 +13,7 @@ class SudokuSolver {
     return ( this.isValidLength(puzzleString) && this.isValidCharacters(puzzleString) );
   }
 
+  // puzzleArray will be accessed as array[row][column]
   stringToArray(puzzleString) {
     let puzzleArray = [];
     for (let i = 0; i < 81; i += 9) {
@@ -26,15 +27,26 @@ class SudokuSolver {
     return puzzleArray.flat().join('');
   }
 
-  checkRowPlacement(puzzleString, row, column, value) {
-
+  // For the "check" functions, rows and columns must be given as 0-index
+  checkRowPlacement(puzzleArray, row, column, value) {
+    for (let i = 0; i < 9; i++) {
+      if (puzzleArray[row][i] == value) {
+        return false;
+      }
+    }
+    return true;
   }
 
-  checkColPlacement(puzzleString, row, column, value) {
-
+  checkColPlacement(puzzleArray, row, column, value) {
+    for (let i = 0; i < 9; i++) {
+      if (puzzleArray[i][column] == value) {
+        return false;
+      }
+    }
+    return true;
   }
 
-  checkRegionPlacement(puzzleString, row, column, value) {
+  checkRegionPlacement(puzzleArray, row, column, value) {
 
   }
 
