@@ -51,7 +51,7 @@ class SudokuSolver {
     const startColumn = Math.floor(column / 3) * 3;
     
     for (let i = startRow; i < startRow + 3; i++) {
-      for (let j = startColumn; j < startColumn + 3; i++) {
+      for (let j = startColumn; j < startColumn + 3; j++) {
         if (puzzleArray[i][j] == value) {
           return false;
         }
@@ -60,8 +60,63 @@ class SudokuSolver {
     return true;
   }
 
+
+  isValidPlacement(puzzleArray, row, column, value) {
+    return (
+      this.checkColPlacement(puzzleArray, row, column, value) && 
+      this.checkRowPlacement(puzzleArray, row, column, value) && 
+      this.checkRegionPlacement(puzzleArray, row, column, value)
+    );
+  }
+
   solve(puzzleString) {
+    let sudokuGrid = this.stringToArray(puzzleString);
+
+    const self = this;
+
+    function findEmptyCell() {
+      for (let row = 0; row < 9; row++) {
+          for (let col = 0; col < 9; col++) {
+              if (sudokuGrid[row][col] == ".") {
+                  return [row, col];
+              }
+          }
+      }
+      return null;  // No empty cells, puzzle is solved
+    }
     
+    // Recursive function that attempts to solve the puzzle
+    function solveRecursion() {
+      const emptyCell = findEmptyCell();
+
+      // If there's no empty cell, the puzzle is solved
+      if (!emptyCell) {
+          return true;
+      }
+
+      const [row, col] = emptyCell;
+
+      // Try digits from 1 to 9 in the empty cell
+      for (let value = 1; value <= 9; value++) {
+          if (self.isValidPlacement(sudokuGrid, row, col, value)) {
+              // Place the value if it's valid
+              sudokuGrid[row][col] = value;
+
+              // Recursively attempt to solve the rest of the grid
+              if (solveRecursion()) {
+                  return true;
+              }
+
+              // If solving fails, reset the cell (backtrack)
+              sudokuGrid[row][col] = ".";
+          }
+      }
+
+      return false;  // Trigger backtracking if no valid number is found
+  }
+
+  solveRecursion();
+  return this.arrayToString(sudokuGrid);
   }
 }
 
