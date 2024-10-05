@@ -9,8 +9,31 @@ class SudokuSolver {
     return regex.test(puzzleString);
   }
 
-  validate(puzzleString) {
-    return ( this.isValidLength(puzzleString) && this.isValidCharacters(puzzleString) );
+  validatePuzzle(puzzleString) {
+    const rows = Array.from({ length: 9 }, () => new Set());
+    const cols = Array.from({ length: 9 }, () => new Set());
+    const regions = Array.from({ length: 9 }, () => new Set());
+  
+    for (let i = 0; i < 81; i++) {
+      const char = puzzleString[i];
+      if (char === ".") continue;
+  
+      const row = Math.floor(i / 9);
+      const col = i % 9;
+      const region = Math.floor(row / 3) * 3 + Math.floor(col / 3);
+  
+      // Check if the current number already exists in the row, column, or region
+      if (rows[row].has(char) || cols[col].has(char) || regions[region].has(char)) {
+        return false;
+      }
+  
+      // Add the number to the appropriate sets
+      rows[row].add(char);
+      cols[col].add(char);
+      regions[region].add(char);
+    }
+  
+    return true;
   }
 
   // puzzleArray will be accessed as array[row][column]
