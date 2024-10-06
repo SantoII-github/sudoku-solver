@@ -30,7 +30,7 @@ module.exports = function (app) {
         res.json({ error: 'Invalid value'})
         return;
       } else if (!coordRegex.test(coordinate)) {
-        res.json({ "error": "Invalid coordinate" })
+        res.json({ error: 'Invalid coordinate' })
         return;
       } else {
         row = coordinate[0].toUpperCase().charCodeAt(0) - 'A'.charCodeAt(0);
@@ -39,11 +39,12 @@ module.exports = function (app) {
 
       let puzzleGrid = solver.stringToArray(puzzleString);
       let conflict = [];
+      // Allows check to succeed if passed value is already in coordinate and is valid
       if (puzzleGrid[row][column] == value) {
         puzzleGrid[row][column] = ".";
       }
       if (!solver.checkRowPlacement(puzzleGrid, row, column, value)) {
-          conflict.push("row")
+        conflict.push("row")
       }
       if (!solver.checkColPlacement(puzzleGrid, row, column, value)) {
         conflict.push("column")
